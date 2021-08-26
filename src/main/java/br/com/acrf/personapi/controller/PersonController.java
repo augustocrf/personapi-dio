@@ -4,7 +4,6 @@ import br.com.acrf.personapi.dto.request.PersonDTO;
 import br.com.acrf.personapi.dto.response.MessageResponseDTO;
 import br.com.acrf.personapi.exception.PersonNotFoundException;
 import br.com.acrf.personapi.service.PersonService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -42,8 +41,11 @@ public class PersonController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) throws PersonNotFoundException {
-        personService.delete(id);
+        personService.deleteById(id);
     }
 
-    
+    @PutMapping("/{id}")
+    public MessageResponseDTO updateById(@PathVariable Long id, @RequestBody @Valid PersonDTO personDTO) throws PersonNotFoundException {
+        return personService.updateById(id, personDTO);
+    }
 }
