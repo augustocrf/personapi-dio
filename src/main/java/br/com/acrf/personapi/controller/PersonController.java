@@ -1,27 +1,42 @@
 package br.com.acrf.personapi.controller;
 
-import br.com.acrf.personapi.dto.MessageResponseDTO;
-import br.com.acrf.personapi.entity.Person;
+import br.com.acrf.personapi.dto.request.PersonDTO;
+import br.com.acrf.personapi.dto.response.MessageResponseDTO;
+import br.com.acrf.personapi.exception.PersonNotFoundException;
 import br.com.acrf.personapi.service.PersonService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/people")
 public class PersonController {
 
-    PersonService personService;
+    private PersonService personService;
 
     @Autowired
-    public PersonController(PersonService personService) {
+    public void setPersonService(PersonService personService) {
         this.personService = personService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO create(@RequestBody Person person) {
-        return personService.create(person);
+    public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO) {
+        return personService.createPerson(personDTO);
+    }
+
+    @GetMapping
+    public List<PersonDTO> listAll(){
+        return personService.listAll();
+    }
+
+    @GetMapping("/{id}")
+    public PersonDTO findById(@PathVariable Long id) throws PersonNotFoundException {
+        return personService.findById(id);
     }
 
 }

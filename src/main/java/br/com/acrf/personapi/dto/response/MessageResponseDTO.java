@@ -1,4 +1,4 @@
-package br.com.acrf.personapi.dto;
+package br.com.acrf.personapi.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
