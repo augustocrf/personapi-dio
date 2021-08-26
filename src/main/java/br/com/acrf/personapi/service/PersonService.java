@@ -11,16 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class PersonService {
 
-    private PersonRepository personRepository;
+    private final PersonRepository personRepository;
 
-    private final PersonMapper personMapper = PersonMapper.INSTANCE;
+    private final PersonMapper personMapper; // = PersonMapper.INSTANCE;
 
     public MessageResponseDTO createPerson(PersonDTO personDTO){
         Person personToSave = personMapper.toModel(personDTO);
@@ -44,12 +43,6 @@ public class PersonService {
         return personMapper.toDTO(person);
     }
 
-    public void deleteById(Long id) throws PersonNotFoundException {
-        verifyIfExists(id);
-
-        personRepository.deleteById(id);
-    }
-
     public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException {
         verifyIfExists(id);
 
@@ -58,6 +51,12 @@ public class PersonService {
         Person updatedPerson = personRepository.save(personToUpdate);
 
         return createMessageResponse(updatedPerson.getId(), "Update person with ID ");
+    }
+
+    public void deleteById(Long id) throws PersonNotFoundException {
+        verifyIfExists(id);
+
+        personRepository.deleteById(id);
     }
 
     private Person verifyIfExists(Long id) throws PersonNotFoundException {
